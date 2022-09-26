@@ -31,8 +31,7 @@ m = mmaze.generate(width=3, height=3)
 m.plot()
 ```
 
-![img](https://raw.githubusercontent.com/MorvanZhou/mmaze/master/demo33.png)
-
+<img src="https://raw.githubusercontent.com/MorvanZhou/mmaze/master/demo33.png" alt="drawing" width="180"/>
 
 Get solution and plot on screen:
 
@@ -42,13 +41,12 @@ solutions = m.sovle(start=(0, 0), end=(9, 9))
 m.plot(solution=solutions[0])
 ```
 
-![img](https://raw.githubusercontent.com/MorvanZhou/mmaze/master/demo.png)
-
-
+<img src="https://raw.githubusercontent.com/MorvanZhou/mmaze/master/demo.png" alt="drawing" width="180"/>
 
 
 ## Demo
-Demo can be found in test file: [tests](https://github.com/MorvanZhou/tests/mmaze_test.py)
+
+Demo can be found in test file: [tests](https://github.com/MorvanZhou/mmaze/blob/master/tests/mmaze_test.py)
 
 ## Install
 
