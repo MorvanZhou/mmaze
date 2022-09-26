@@ -12,6 +12,7 @@ class Maze:
         self._width = width * 2 + 1
         self._height = height * 2 + 1
         self.data: tp.List[tp.List[int]] = [[value] * self._width for _ in range(self._height)]
+        self.solutions = []
 
     def find_neighbors(self, r: int, c: int, is_wall: bool = False) -> tp.List[tp.Tuple[int, int]]:
         """Find all the grid neighbors of the current position; visited, or not.
@@ -54,7 +55,8 @@ class Maze:
         visual.save(path, self, solution)
 
     def solve(self, start: tp.Sequence[int], end: tp.Sequence[int], method: str = "backtracking") -> tp.Sequence:
-        return mmaze.solve(self, start, end, method)
+        self.solutions = mmaze.solve(self, start, end, method)
+        return self.solutions
 
     @property
     def height(self):
