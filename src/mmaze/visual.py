@@ -1,9 +1,8 @@
-import typing
 import os
+import typing
 
 if typing.TYPE_CHECKING:
     from mmaze.maze import Maze
-
 
 plt = None
 cm = None

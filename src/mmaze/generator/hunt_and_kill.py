@@ -116,8 +116,8 @@ class HuntAndKill(BaseMazeGenerator):
                     return -1, -1
 
             if (
-                maze.set(row, col, 0)
-                and len(maze.find_neighbors(row, col, True)) > 0
+                    maze.set(row, col, 0)
+                    and len(maze.find_neighbors(row, col, True)) > 0
             ):
                 found = True
 

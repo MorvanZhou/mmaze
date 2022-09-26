@@ -3,10 +3,9 @@ import typing as tp
 from mmaze import generator
 from mmaze import solver
 from mmaze import visual
-from mmaze.maze import Maze
 from mmaze.generator.base import BaseMazeGenerator
+from mmaze.maze import Maze
 from mmaze.solver.base import BaseSolver
-
 
 __GENERATOR_MAP: tp.Dict[str, tp.Type[BaseMazeGenerator]] = {}
 __BASE_GENERATOR_MODULE = BaseMazeGenerator.__module__

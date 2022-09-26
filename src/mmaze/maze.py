@@ -1,5 +1,5 @@
-import typing as tp
 import random
+import typing as tp
 
 import mmaze
 from mmaze import visual

@@ -1,6 +1,6 @@
-from abc import ABCMeta, abstractmethod
-import typing as tp
 import random
+import typing as tp
+from abc import ABCMeta, abstractmethod
 
 from mmaze.maze import Maze
 
@@ -69,17 +69,17 @@ class BaseSolver(metaclass=ABCMeta):
         if r > 1 and not self.grid[r - 1][c] and not self.grid[r - 2][c]:
             ns.append((r - 2, c))
         if (
-            r < len(self.grid) - 2
-            and not self.grid[r + 1][c]
-            and not self.grid[r + 2][c]
+                r < len(self.grid) - 2
+                and not self.grid[r + 1][c]
+                and not self.grid[r + 2][c]
         ):
             ns.append((r + 2, c))
         if c > 1 and not self.grid[r][c - 1] and not self.grid[r][c - 2]:
             ns.append((r, c - 2))
         if (
-            c < len(self.grid[0]) - 2
-            and not self.grid[r][c + 1]
-            and not self.grid[r][c + 2]
+                c < len(self.grid[0]) - 2
+                and not self.grid[r][c + 1]
+                and not self.grid[r][c + 2]
         ):
             ns.append((r, c + 2))
 
@@ -186,9 +186,9 @@ class BaseSolver(metaclass=ABCMeta):
 
             for i in range(len(solution) - 1):
                 first = solution[i]
-                if first in solution[i + 1 :]:
+                if first in solution[i + 1:]:
                     first_i = i
-                    last_i = solution[i + 1 :].index(first) + i + 1
+                    last_i = solution[i + 1:].index(first) + i + 1
                     found = True
                     break
 

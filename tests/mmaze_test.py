@@ -81,4 +81,3 @@ class SolverTest(unittest.TestCase):
         self.assertGreater(len(solutions), 0)
         self.assertGreater(len(solutions[0]), 0)
         m.save("demo.png", solutions[0])
-

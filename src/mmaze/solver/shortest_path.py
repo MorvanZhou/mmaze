@@ -59,8 +59,8 @@ class ShortestPath(BaseSolver):
                     if len(solutions[s]) > 1:
                         # check to see if you've gone past the endpoint
                         if (
-                            self._midpoint(solutions[s][-1], solutions[s][-2])
-                            == self.end
+                                self._midpoint(solutions[s][-1], solutions[s][-2])
+                                == self.end
                         ):
                             return self._clean_up([solutions[s][:-1]])
 
