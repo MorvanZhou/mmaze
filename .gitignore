@@ -1,0 +1,5 @@
+/.idea
+**/__pycache__
+/dist
+/src/mmaze.egg-info
+/tests/*.png
