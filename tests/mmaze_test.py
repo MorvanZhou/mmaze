@@ -57,6 +57,10 @@ class MazeToolTest(unittest.TestCase):
         g = mmaze.generator.Prims()
         self.m = g.generate(self.w, self.h)
 
+    def test_division(self):
+        g = mmaze.generator.Division()
+        self.m = g.generate(self.w, self.h)
+
     def test_wilsons(self):
         g = mmaze.generator.Wilsons()
         self.m = g.generate(self.w, self.h)

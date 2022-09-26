@@ -6,3 +6,4 @@ from mmaze.generator.hunt_and_kill import HuntAndKill
 from mmaze.generator.kruskal import Kruskal
 from mmaze.generator.prims import Prims
 from mmaze.generator.wilsons import Wilsons
+from mmaze.generator.division import Division
