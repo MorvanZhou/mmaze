@@ -31,6 +31,9 @@ m = mmaze.generate(width=3, height=3)
 m.plot()
 ```
 
+![img](https://raw.githubusercontent.com/MorvanZhou/mmaze/master/demo33.png)
+
+
 Get solution and plot on screen:
 
 ```python
@@ -38,6 +41,9 @@ m = mmaze.generate(width=10, height=10)
 solutions = m.sovle(start=(0, 0), end=(9, 9))
 m.plot(solution=solutions[0])
 ```
+
+![img](https://raw.githubusercontent.com/MorvanZhou/mmaze/master/demo.png)
+
 
 
 
@@ -57,6 +63,3 @@ Fork this repo:
 ```
 $ git clone https://github.com/MorvanZhou/mmaze.git
 ```
-
-## Results
-![img](https://raw.githubusercontent.com/MorvanZhou/mmaze/master/demo.png)
