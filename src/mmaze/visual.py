@@ -59,16 +59,16 @@ def _plot(maze: "Maze", solution: list = None):
 
 def plot(maze: "Maze", solution: list = None):
     _try_import_plt()
+    plt.clf()
     _plot(maze, solution)
     plt.show()
-    plt.clf()
 
 
 def save(path: str, maze: "Maze", solution: list = None):
     _try_import_plt()
+    plt.clf()
     _plot(maze, solution)
     _dir = os.path.dirname(path)
     if _dir != "":
         os.makedirs(_dir, exist_ok=True)
     plt.savefig(path, bbox_inches='tight')
-    plt.clf()
