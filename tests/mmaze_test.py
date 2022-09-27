@@ -71,27 +71,42 @@ class SolverTest(unittest.TestCase):
         g = mmaze.generator.Prims()
         m = g.generate(10, 10)
         s = mmaze.solver.Backtracking()
-        solutions = s.solve(m, (0, 0), (9, 9))
+        start = (0, 0)
+        end = (9, 9)
+        solutions = s.solve(m, start, end)
 
         self.assertGreater(len(solutions), 0)
         self.assertGreater(len(solutions[0]), 0)
-        m.plot(solutions[0])
+        m.plot(start, end, solutions[0])
 
     def test_solve_from_maze(self):
         g = mmaze.generator.Prims()
         m = g.generate(10, 10)
-        solutions = m.solve((0, 0), (9, 9))
+        start = (0, 0)
+        end = (9, 9)
+        solutions = m.solve(start, end)
 
         self.assertGreater(len(solutions), 0)
         self.assertGreater(len(solutions[0]), 0)
-        m.save("demo.png", solutions[0])
+        m.save("demo.png", start=start, end=end, solution=solutions[0])
 
     def test_solve_print(self):
         g = mmaze.generator.Prims()
         m = g.generate(3, 3)
         print(m)
-        solutions = m.solve((0, 0), (2, 2))
+        start = (0, 0)
+        end = (2, 2)
+        solutions = m.solve(start, end)
+        print(m.to_number())
 
         self.assertGreater(len(solutions), 0)
         self.assertGreater(len(solutions[0]), 0)
-        print(m.tostring(solution=solutions[0]))
+        print(m.tostring(start=start, end=end, solution=solutions[0]))
+
+    def test_print_number(self):
+        g = mmaze.generator.Prims()
+        m = g.generate(3, 3)
+        start = (0, 0)
+        end = (2, 2)
+        solutions = m.solve(start, end)
+        print(m.to_number(start, end, solutions[0]))

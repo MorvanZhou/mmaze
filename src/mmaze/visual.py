@@ -1,9 +1,9 @@
 import os
-import typing
+import typing as tp
 
 from mmaze.cell import CellType
 
-if typing.TYPE_CHECKING:
+if tp.TYPE_CHECKING:
     from mmaze.maze import Maze
 
 plt = None
@@ -27,47 +27,76 @@ def _try_import_plt():
         from matplotlib import cm
 
 
-def _plot(maze: "Maze", solution: list = None):
-    plt.figure(figsize=(5, 5))
+def _plot(
+        maze: "Maze",
+        start: tp.Optional[tp.Sequence[int]] = None,
+        end: tp.Optional[tp.Sequence[int]] = None,
+        solution: tp.Optional[tp.Sequence[tp.Sequence]] = None,
+):
+    plt.figure(figsize=((maze.width - 1) / 2, (maze.height - 1) / 2))
 
     img = []
     for row in maze.data:
         img_row = []
         for cell in row:
-            if cell == CellType.ROAD:  # road
-                v = (1., 1., 1.)  # white
-            elif cell == CellType.WALL:  # wall
-                v = (0., 0., 0.)  # black
+            if cell == CellType.ROAD:
+                v = (1., 1., 1.)
+            elif cell == CellType.WALL:
+                v = (60 / 255, 60 / 255, 60 / 255)
             else:
                 v = (0.6, 0.6, 0.6)
             img_row.append(v)
         img.append(img_row)
-    if solution is not None and len(solution) > 2:
-        sol = solution[1: -1]
+    if solution is not None:
         cmap = plt.get_cmap("cool")
-        len_s = len(sol)
+        len_s = len(solution)
         norm = mpl.colors.Normalize(vmin=0, vmax=1)
         scalar_map = cm.ScalarMappable(norm=norm, cmap=cmap)
 
-        for i, p in enumerate(sol):
+        for i, p in enumerate(solution):
             img[p[0]][p[1]] = scalar_map.to_rgba(i / len_s)[:3]
-        plt.text(solution[0][0], solution[0][1], "S", c="#09479A", fontweight="heavy", ha="center", va="center")
-        plt.text(solution[-1][0], solution[-1][1], "E", c="#09479A", fontweight="heavy", ha="center", va="center")
+    if start is not None:
+        p = [p * 2 + 1 for p in start]
+        plt.text(
+            p[0], p[1], "S",
+            size=min(maze.width, maze.height),
+            c="#09479A", fontweight="heavy",
+            ha="center", va="center")
+    if end is not None:
+        p = [p * 2 + 1 for p in end]
+        plt.text(
+            p[0], p[1], "E",
+            size=min(maze.width, maze.height),
+            c="#09479A", fontweight="heavy",
+            ha="center", va="center")
+
     plt.imshow(img, interpolation='nearest')
-    plt.xticks([]), plt.yticks([])
+    plt.axis('off')
+    plt.tight_layout()
 
 
-def plot(maze: "Maze", solution: list = None):
+def plot(
+        maze: "Maze",
+        start: tp.Optional[tp.Sequence[int]] = None,
+        end: tp.Optional[tp.Sequence[int]] = None,
+        solution: tp.Optional[tp.Sequence[tp.Sequence]] = None,
+):
     _try_import_plt()
     plt.clf()
-    _plot(maze, solution)
+    _plot(maze, start, end, solution)
     plt.show()
 
 
-def save(path: str, maze: "Maze", solution: list = None):
+def save(
+        path: str,
+        maze: "Maze",
+        start: tp.Optional[tp.Sequence[int]] = None,
+        end: tp.Optional[tp.Sequence[int]] = None,
+        solution: tp.Optional[tp.Sequence[tp.Sequence]] = None,
+):
     _try_import_plt()
     plt.clf()
-    _plot(maze, solution)
+    _plot(maze, start, end, solution)
     _dir = os.path.dirname(path)
     if _dir != "":
         os.makedirs(_dir, exist_ok=True)

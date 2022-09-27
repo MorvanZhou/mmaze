@@ -199,11 +199,11 @@ class BaseSolver(metaclass=ABCMeta):
                 solution = solution[:first_i] + solution[last_i:]
 
         # solution does not include entrances
-        # if len(solution) > 1:
-        #     if solution[0] == self.start:
-        #         solution = solution[1:]
-        #     if solution[-1] == self.end:
-        #         solution = solution[:-1]
+        if len(solution) > 1:
+            if solution[0] == self.start:
+                solution = solution[1:]
+            if solution[-1] == self.end:
+                solution = solution[:-1]
 
         return solution
 

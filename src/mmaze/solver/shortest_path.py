@@ -15,11 +15,6 @@ class ShortestPath(BaseSolver):
     """
 
     def _solve(self):
-        """bredth-first search solution to the maze
-
-        Returns:
-            list: valid maze solutions
-        """
         # determine if edge or body entrances
         self.start_edge = self._on_edge(self.start)
         self.end_edge = self._on_edge(self.start)

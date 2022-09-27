@@ -56,13 +56,29 @@ class Maze:
     def get(self, row: int, col: int) -> CellType:
         return self.data[row][col]
 
-    def plot(self, solution=None):
-        visual.plot(self, solution)
+    def plot(
+            self,
+            start: tp.Optional[tp.Sequence[int]] = None,
+            end: tp.Optional[tp.Sequence[int]] = None,
+            solution: tp.Optional[tp.Sequence[tp.Sequence]] = None
+    ):
+        visual.plot(self, start, end, solution)
 
-    def save(self, path: str, solution=None):
-        visual.save(path, self, solution)
+    def save(
+            self,
+            path: str,
+            start: tp.Optional[tp.Sequence[int]] = None,
+            end: tp.Optional[tp.Sequence[int]] = None,
+            solution: tp.Optional[tp.Sequence[tp.Sequence]] = None
+    ):
+        visual.save(path, self, start, end, solution)
 
-    def solve(self, start: tp.Sequence[int], end: tp.Sequence[int], method: str = "backtracking") -> tp.Sequence:
+    def solve(
+            self,
+            start: tp.Sequence[int],
+            end: tp.Sequence[int],
+            method: str = "backtracking"
+    ) -> tp.Sequence:
         self.solutions = mmaze.solve(self, start, end, method)
         return self.solutions
 
@@ -82,7 +98,37 @@ class Maze:
     def base_width(self):
         return self._base_width
 
-    def tostring(self, solution=None):
+    def to_number(
+            self,
+            start: tp.Optional[tp.Sequence[int]] = None,
+            end: tp.Optional[tp.Sequence[int]] = None,
+            solution: tp.Optional[tp.Sequence[tp.Sequence]] = None,
+    ) -> tp.List[tp.List[int]]:
+        if self.data is None:
+            return []
+        res = []
+        for row in self.data:
+            res_row = []
+            for cell in row:
+                res_row.append(cell.value)
+            res.append(res_row)
+        if start is not None:
+            p = [p * 2 + 1 for p in start]
+            res[p[0]][p[1]] = CellType.START.value
+        if end is not None:
+            p = [p * 2 + 1 for p in end]
+            res[p[0]][p[1]] = CellType.END.value
+        if solution is not None:
+            for i, p in enumerate(solution):
+                res[p[0]][p[1]] = CellType.SOLUTION.value
+        return res
+
+    def tostring(
+            self,
+            start: tp.Optional[tp.Sequence[int]] = None,
+            end: tp.Optional[tp.Sequence[int]] = None,
+            solution: tp.Optional[tp.Sequence[tp.Sequence]] = None,
+    ):
         if self.data is None:
             return ""
 
@@ -97,14 +143,16 @@ class Maze:
                     str_row.append(" ")
             txt.append(str_row)
 
-        if solution is not None and len(solution) > 2:
-            txt[solution[0][0]][solution[0][1]] = "S"
-            txt[solution[-1][0]][solution[-1][1]] = "E"
-            sol = solution[1: -1]
-
-            for i, p in enumerate(sol):
+        if solution is not None:
+            for i, p in enumerate(solution):
                 txt[p[0]][p[1]] = "*"
 
+        if start is not None:
+            p = [p * 2 + 1 for p in start]
+            txt[p[0]][p[1]] = "S"
+        if end is not None:
+            p = [p * 2 + 1 for p in end]
+            txt[p[0]][p[1]] = "E"
         return "\n".join("".join(row) for row in txt)
 
     def __str__(self):
