@@ -57,7 +57,7 @@ solutions = m.sovle(start=(0, 0), end=(9, 9))
 m.plot(solution=solutions[0])
 ```
 
-<img src="https://raw.githubusercontent.com/MorvanZhou/mmaze/master/demo.png" alt="drawing" width="180"/>
+<img src="https://raw.githubusercontent.com/MorvanZhou/mmaze/master/demo.png" alt="drawing" width="300"/>
 
 ## Demo
 
