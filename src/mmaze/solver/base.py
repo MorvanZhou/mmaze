@@ -3,11 +3,12 @@ import typing as tp
 from abc import ABCMeta, abstractmethod
 
 from mmaze.maze import Maze
+from mmaze.cell import CellType
 
 
 class BaseSolver(metaclass=ABCMeta):
     def __init__(self, prune=True):
-        self.grid = None
+        self.maze = None
         self.start = None
         self.end = None
         self.prune = prune
@@ -22,7 +23,7 @@ class BaseSolver(metaclass=ABCMeta):
         Returns:
             list: final solutions
         """
-        self.grid = maze.data
+        self.maze = maze
         self.start = tuple([s * 2 + 1 for s in start])
         self.end = tuple([e * 2 + 1 for e in end])
         self._pre_check(start, end)
@@ -41,10 +42,10 @@ class BaseSolver(metaclass=ABCMeta):
         """
 
         # validating checks
-        assert 0 <= start[0] < len(self.grid), "Entrance is outside the grid."
-        assert 0 <= start[1] < len(self.grid[0]), "Entrance is outside the grid."
-        assert 0 <= end[0] < len(self.grid), "Entrance is outside the grid."
-        assert 0 <= end[1] < len(self.grid[0]), "Entrance is outside the grid."
+        assert 0 <= start[0] < self.maze.height, "Entrance is outside the grid."
+        assert 0 <= start[1] < self.maze.width, "Entrance is outside the grid."
+        assert 0 <= end[0] < self.maze.height, "Entrance is outside the grid."
+        assert 0 <= end[1] < self.maze.width, "Entrance is outside the grid."
 
     @abstractmethod
     def _solve(self):
@@ -66,20 +67,20 @@ class BaseSolver(metaclass=ABCMeta):
         r, c = pos
         ns = []
 
-        if r > 1 and not self.grid[r - 1][c] and not self.grid[r - 2][c]:
+        if r > 1 and self.maze.get(r - 1, c) != CellType.WALL and self.maze.get(r - 2, c) != CellType.WALL:
             ns.append((r - 2, c))
         if (
-                r < len(self.grid) - 2
-                and not self.grid[r + 1][c]
-                and not self.grid[r + 2][c]
+                r < self.maze.height - 2
+                and self.maze.get(r + 1, c) != CellType.WALL
+                and self.maze.get(r + 2, c) != CellType.WALL
         ):
             ns.append((r + 2, c))
-        if c > 1 and not self.grid[r][c - 1] and not self.grid[r][c - 2]:
+        if c > 1 and self.maze.get(r, c - 1) != CellType.WALL and self.maze.get(r, c - 2) != CellType.WALL:
             ns.append((r, c - 2))
         if (
-                c < len(self.grid[0]) - 2
-                and not self.grid[r][c + 1]
-                and not self.grid[r][c + 2]
+                c < self.maze.width - 2
+                and self.maze.get(r, c + 1) != CellType.WALL
+                and self.maze.get(r, c + 2) != CellType.WALL
         ):
             ns.append((r, c + 2))
 
@@ -118,9 +119,9 @@ class BaseSolver(metaclass=ABCMeta):
         """
         r, c = cell
 
-        if r == 0 or r == len(self.grid) - 1:
+        if r == 0 or r == self.maze.height - 1:
             return True
-        if c == 0 or c == len(self.grid[0]) - 1:
+        if c == 0 or c == self.maze.width - 1:
             return True
 
         return False
@@ -137,7 +138,7 @@ class BaseSolver(metaclass=ABCMeta):
 
         if r == 0:
             return 1, c
-        elif r == (len(self.grid) - 1):
+        elif r == self.maze.height - 1:
             return r - 1, c
         elif c == 0:
             return r, 1
@@ -166,7 +167,7 @@ class BaseSolver(metaclass=ABCMeta):
 
         return False
 
-    def _prune_solution(self, solution):
+    def _prune_solution(self, solution: list):
         """In the process of solving a maze, the algorithm might go down
         the wrong corridor then backtrack. These extraneous steps need to be removed.
         Also, clean up the end points.
@@ -183,6 +184,8 @@ class BaseSolver(metaclass=ABCMeta):
         while found and len(solution) > 2 and attempt < max_attempt:
             found = False
             attempt += 1
+            first_i = 0
+            last_i = 0
 
             for i in range(len(solution) - 1):
                 first = solution[i]

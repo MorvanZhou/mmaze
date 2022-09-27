@@ -3,6 +3,7 @@ import typing as tp
 
 from mmaze.generator.base import BaseMazeGenerator
 from mmaze.maze import Maze
+from mmaze.cell import CellType
 
 
 class Ellers(BaseMazeGenerator):
@@ -22,7 +23,7 @@ class Ellers(BaseMazeGenerator):
         self.yskew = 0.0 if yskew < 0.0 else 1.0 if yskew > 1.0 else yskew
 
     def generate(self, width: int, height: int) -> Maze:
-        m = Maze(width, height, value=0)
+        m = Maze(width, height, CellType.ROAD)
         # create empty grid, with walls
         sets = [[-1] * m.width for _ in range(m.height)]
 
@@ -154,4 +155,4 @@ class Ellers(BaseMazeGenerator):
         for r in range(maze.height):
             for c in range(maze.width):
                 if sets[r][c] == -1:
-                    maze.set(r, c, 1)
+                    maze.set(r, c, CellType.WALL)

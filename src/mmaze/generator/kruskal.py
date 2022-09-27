@@ -3,6 +3,7 @@ import typing as tp
 
 from mmaze.generator.base import BaseMazeGenerator
 from mmaze.maze import Maze
+from mmaze.cell import CellType
 
 
 class Kruskal(BaseMazeGenerator):
@@ -10,12 +11,12 @@ class Kruskal(BaseMazeGenerator):
         super().__init__()
 
     def generate(self, width: int, height: int) -> Maze:
-        m = Maze(width, height, 1)
+        m = Maze(width, height, CellType.WALL)
         forest = []
         for row in range(1, m.height - 1, 2):
             for col in range(1, m.width - 1, 2):
                 forest.append([(row, col)])
-                m.set(row, col, 0)
+                m.set(row, col, CellType.ROAD)
 
         edges: tp.List[tp.Tuple[int, int]] = []
         for row in range(2, m.height - 1, 2):
@@ -70,6 +71,6 @@ class Kruskal(BaseMazeGenerator):
                 ]  # faster than forest.remove(temp1)
                 forest = [x for x in forest if x != temp2]
                 forest.append(new_tree)
-                m.set(ce_row, ce_col, 0)
+                m.set(ce_row, ce_col, CellType.ROAD)
 
         return m

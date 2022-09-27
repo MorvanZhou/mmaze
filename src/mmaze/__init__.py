@@ -6,6 +6,7 @@ from mmaze import visual
 from mmaze.generator.base import BaseMazeGenerator
 from mmaze.maze import Maze
 from mmaze.solver.base import BaseSolver
+from mmaze.cell import CellType
 
 __GENERATOR_MAP: tp.Dict[str, tp.Type[BaseMazeGenerator]] = {}
 __BASE_GENERATOR_MODULE = BaseMazeGenerator.__module__

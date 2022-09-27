@@ -1,5 +1,6 @@
 from mmaze.generator.base import BaseMazeGenerator
 from mmaze.maze import Maze
+from mmaze.cell import CellType
 
 
 class Backtracking(BaseMazeGenerator):
@@ -15,11 +16,11 @@ class Backtracking(BaseMazeGenerator):
         super().__init__()  # create empty grid, with walls
 
     def generate(self, width: int, height: int) -> Maze:
-        m = Maze(width, height, value=1)
+        m = Maze(width, height, cell_type=CellType.WALL)
 
         row, col = m.random_position()
         track = [(row, col)]
-        m.set(row, col, 0)
+        m.set(row, col, CellType.ROAD)
 
         while track:
             (row, col) = track[-1]
@@ -29,8 +30,8 @@ class Backtracking(BaseMazeGenerator):
                 track = track[:-1]
             else:
                 row_, col_ = neighbors[0]
-                m.set(row_, col_, 0)
-                m.set((row_ + row) // 2, (col_ + col) // 2, 0)
+                m.set(row_, col_, CellType.ROAD)
+                m.set((row_ + row) // 2, (col_ + col) // 2, CellType.ROAD)
 
                 track += [(row_, col_)]
 

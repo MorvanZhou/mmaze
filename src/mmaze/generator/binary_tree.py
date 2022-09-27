@@ -2,6 +2,7 @@ import random
 
 from mmaze.generator.base import BaseMazeGenerator
 from mmaze.maze import Maze
+from mmaze.cell import CellType
 
 
 class BinaryTree(BaseMazeGenerator):
@@ -22,13 +23,13 @@ class BinaryTree(BaseMazeGenerator):
             self.skew = skewes[key]
 
     def generate(self, width: int, height: int) -> Maze:
-        m = Maze(width, height, 1)
+        m = Maze(width, height, CellType.WALL)
 
         for row in range(1, m.height, 2):
             for col in range(1, m.width, 2):
-                m.set(row, col, 0)
+                m.set(row, col, CellType.ROAD)
                 neighbor_row, neighbor_col = self._find_neighbor(m.width, m.height, row, col)
-                m.set(neighbor_row, neighbor_col, 0)
+                m.set(neighbor_row, neighbor_col, CellType.ROAD)
 
         return m
 

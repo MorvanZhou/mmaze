@@ -1,8 +1,7 @@
 import random
-import typing as tp
 
 from mmaze.generator.base import BaseMazeGenerator
-from mmaze.maze import Maze
+from mmaze.maze import Maze, CellType
 
 # CONSTANTS
 VERTICAL = 0
@@ -22,13 +21,13 @@ class Division(BaseMazeGenerator):
 
     def generate(self, width: int, height: int):
         # create empty grid
-        m = Maze(width, height, value=0)
+        m = Maze(width, height, cell_type=CellType.ROAD)
         # fill borders
-        m.data[0] = [1 for _ in range(len(m.data[0]))]
-        m.data[-1] = [1 for _ in range(len(m.data[-1]))]
+        m.data[0] = [CellType.WALL for _ in range(len(m.data[0]))]
+        m.data[-1] = [CellType.WALL for _ in range(len(m.data[-1]))]
         for i in range(m.height):
-            m.data[i][0] = 1
-            m.data[i][-1] = 1
+            m.set(i, 0, CellType.WALL)
+            m.set(i, -1, CellType.WALL)
 
         region_stack = [((1, 1), (m.height - 2, m.width - 2))]
 
@@ -65,12 +64,12 @@ class Division(BaseMazeGenerator):
             # add walls to correct places
             if cut_direction == 0:  # vertical
                 for row in range(min_y, max_y + 1):
-                    m.set(row, min_x + cut_posi, 1)
-                m.set(min_y + door_posi, min_x + cut_posi, 0)
+                    m.set(row, min_x + cut_posi, CellType.WALL)
+                m.set(min_y + door_posi, min_x + cut_posi, CellType.ROAD)
             else:  # horizontal
                 for col in range(min_x, max_x + 1):
-                    m.set(min_y + cut_posi, col, 1)
-                m.set(min_y + cut_posi, min_x + door_posi, 0)
+                    m.set(min_y + cut_posi, col, CellType.WALL)
+                m.set(min_y + cut_posi, min_x + door_posi, CellType.ROAD)
 
             # add new regions to stack
             if cut_direction == 0:  # vertical

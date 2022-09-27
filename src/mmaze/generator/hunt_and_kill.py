@@ -2,6 +2,7 @@ import random
 
 from mmaze.generator.base import BaseMazeGenerator
 from mmaze.maze import Maze
+from mmaze.cell import CellType
 
 RANDOM = 1
 SERPENTINE = 2
@@ -32,10 +33,10 @@ class HuntAndKill(BaseMazeGenerator):
             self.ho = RANDOM
 
     def generate(self, width: int, height: int) -> Maze:
-        m = Maze(width, height, value=1)
+        m = Maze(width, height, CellType.WALL)
         # find an arbitrary starting position
         row, col = m.random_position()
-        m.set(row, col, 0)
+        m.set(row, col, CellType.ROAD)
 
         # perform many random walks, to fill the maze
         num_trials = 0
@@ -56,15 +57,15 @@ class HuntAndKill(BaseMazeGenerator):
             col (int): col index
         Returns: None
         """
-        if maze.get(row, col) == 0:
+        if maze.get(row, col) == CellType.ROAD:
             this_row = row
             this_col = col
             unvisited_neighbors = maze.find_neighbors(this_row, this_col, True)
 
             while len(unvisited_neighbors) > 0:
                 neighbor = random.choice(unvisited_neighbors)
-                maze.set(neighbor[0], neighbor[1], 0)
-                maze.set((neighbor[0] + this_row) // 2, (neighbor[1] + this_col) // 2, 0)
+                maze.set(neighbor[0], neighbor[1], CellType.ROAD)
+                maze.set((neighbor[0] + this_row) // 2, (neighbor[1] + this_col) // 2, CellType.ROAD)
                 this_row, this_col = neighbor
                 unvisited_neighbors = maze.find_neighbors(this_row, this_col, True)
 
@@ -116,7 +117,7 @@ class HuntAndKill(BaseMazeGenerator):
                     return -1, -1
 
             if (
-                    maze.set(row, col, 0)
+                    maze.set(row, col, CellType.ROAD)
                     and len(maze.find_neighbors(row, col, True)) > 0
             ):
                 found = True

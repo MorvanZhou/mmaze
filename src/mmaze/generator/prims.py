@@ -2,6 +2,7 @@ import random
 
 from mmaze.generator.base import BaseMazeGenerator
 from mmaze.maze import Maze
+from mmaze.cell import CellType
 
 
 class Prims(BaseMazeGenerator):
@@ -20,10 +21,10 @@ class Prims(BaseMazeGenerator):
         super().__init__()
 
     def generate(self, width: int, height: int) -> Maze:
-        m = Maze(width, height, 1)
+        m = Maze(width, height, CellType.WALL)
         # choose a random starting position
         row, col = m.random_position()
-        m.set(row, col, 0)
+        m.set(row, col, CellType.ROAD)
 
         # created a weighted list of all vertices connected in the graph
         neighbors = m.find_neighbors(row, col, True)
@@ -36,11 +37,11 @@ class Prims(BaseMazeGenerator):
             nn = random.randrange(len(neighbors))
             row, col = neighbors[nn]
             visited += 1
-            m.set(row, col, 0)
+            m.set(row, col, CellType.ROAD)
             neighbors = neighbors[:nn] + neighbors[nn + 1:]
             # connect that neighbor to a random neighbor with grid[posi] == 0
             nearest_n0, nearest_n1 = m.find_neighbors(row, col)[0]
-            m.set((row + nearest_n0) // 2, (col + nearest_n1) // 2, 0)
+            m.set((row + nearest_n0) // 2, (col + nearest_n1) // 2, CellType.ROAD)
 
             # find all unvisited neighbors of current, add them to neighbors
             unvisited = m.find_neighbors(row, col, True)

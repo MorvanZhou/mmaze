@@ -2,6 +2,7 @@ import random
 
 from mmaze.generator.base import BaseMazeGenerator
 from mmaze.maze import Maze
+from mmaze.cell import CellType
 
 RANDOM = 1
 SERPENTINE = 2
@@ -26,10 +27,10 @@ class Wilsons(BaseMazeGenerator):
             self._hunt_order = RANDOM
 
     def generate(self, width: int, height: int) -> Maze:
-        m = Maze(width, height, 1)
+        m = Maze(width, height, CellType.WALL)
         # find an arbitrary starting position
         row, col = m.random_position()
-        m.set(row, col, 0)
+        m.set(row, col, CellType.ROAD)
         num_visited = 1
         row, col = self._hunt(m, num_visited)
 
@@ -87,7 +88,7 @@ class Wilsons(BaseMazeGenerator):
                 if cell[0] > maze.height - 2:
                     return -1, -1
 
-            if maze.get(cell[0], cell[1]) != 0:
+            if maze.get(cell[0], cell[1]) != CellType.ROAD:
                 found = True
 
         return cell
@@ -109,7 +110,7 @@ class Wilsons(BaseMazeGenerator):
         walk = {start: direction}
         current = self._move(start, direction)
 
-        while maze.get(current[0], current[1]) == 1:
+        while maze.get(current[0], current[1]) == CellType.WALL:
             direction = self._random_dir(maze.width, maze.height, current)
             walk[current] = direction
             current = self._move(current, direction)
@@ -171,10 +172,10 @@ class Wilsons(BaseMazeGenerator):
         visits = 0
         current = start
 
-        while maze.get(current[0], current[1]) != 0:
-            maze.set(current[0], current[1], 0)
+        while maze.get(current[0], current[1]) != CellType.ROAD:
+            maze.set(current[0], current[1], CellType.ROAD)
             next1 = self._move(current, walk[current])
-            maze.set((next1[0] + current[0]) // 2, (next1[1] + current[1]) // 2, 0)
+            maze.set((next1[0] + current[0]) // 2, (next1[1] + current[1]) // 2, CellType.ROAD)
             visits += 1
             current = next1
 

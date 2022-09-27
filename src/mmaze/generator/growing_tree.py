@@ -2,6 +2,7 @@ import random
 
 from mmaze.generator.base import BaseMazeGenerator
 from mmaze.maze import Maze
+from mmaze.cell import CellType
 
 
 class GrowingTree(BaseMazeGenerator):
@@ -23,9 +24,9 @@ class GrowingTree(BaseMazeGenerator):
         self.backtrack_chance = backtrack_chance
 
     def generate(self, width: int, height: int) -> Maze:
-        m = Maze(width, height, 1)
+        m = Maze(width, height, CellType.WALL)
         row, col = m.random_position()
-        m.set(row, col, 0)
+        m.set(row, col, CellType.ROAD)
         active = [(row, col)]
 
         # continue until you have no more neighbors to move to
@@ -44,7 +45,7 @@ class GrowingTree(BaseMazeGenerator):
             row_, col_ = random.choice(next_neighbors)
             active += [(row_, col_)]
 
-            m.set(row_, col_, 0)
-            m.set((row + row_) // 2, (col + col_) // 2, 0)
+            m.set(row_, col_, CellType.ROAD)
+            m.set((row + row_) // 2, (col + col_) // 2, CellType.ROAD)
 
         return m

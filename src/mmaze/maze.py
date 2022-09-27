@@ -3,15 +3,16 @@ import typing as tp
 
 import mmaze
 from mmaze import visual
+from mmaze.cell import CellType
 
 
 class Maze:
-    def __init__(self, width, height, value: int = 1):
+    def __init__(self, width, height, cell_type: CellType = CellType.WALL):
         self._base_width = width
         self._base_height = height
         self._width = width * 2 + 1
         self._height = height * 2 + 1
-        self.data: tp.List[tp.List[int]] = [[value] * self._width for _ in range(self._height)]
+        self.data: tp.List[tp.List[CellType]] = [[cell_type] * self._width for _ in range(self._height)]
         self.solutions = []
 
     def find_neighbors(self, r: int, c: int, is_wall: bool = False) -> tp.List[tp.Tuple[int, int]]:
@@ -25,15 +26,22 @@ class Maze:
             list: all neighboring cells that match our request
         """
 
+        def check_wall(row, col):
+            cell = self.get(row, col)
+            if is_wall:
+                return cell == CellType.WALL
+            else:
+                return cell != CellType.WALL
+
         ns = []
 
-        if r > 1 and self.data[r - 2][c] == is_wall:
+        if r > 1 and check_wall(r - 2, c):
             ns.append((r - 2, c))
-        if r < self.height - 2 and self.data[r + 2][c] == is_wall:
+        if r < self.height - 2 and check_wall(r + 2, c):
             ns.append((r + 2, c))
-        if c > 1 and self.data[r][c - 2] == is_wall:
+        if c > 1 and check_wall(r, c - 2):
             ns.append((r, c - 2))
-        if c < self.width - 2 and self.data[r][c + 2] == is_wall:
+        if c < self.width - 2 and check_wall(r, c + 2):
             ns.append((r, c + 2))
 
         random.shuffle(ns)
@@ -42,10 +50,10 @@ class Maze:
     def random_position(self):
         return random.randrange(1, self._height, 2), random.randrange(1, self._width, 2)
 
-    def set(self, row: int, col: int, value):
-        self.data[row][col] = value
+    def set(self, row: int, col: int, cell_type: CellType):
+        self.data[row][col] = cell_type
 
-    def get(self, row: int, col: int) -> int:
+    def get(self, row: int, col: int) -> CellType:
         return self.data[row][col]
 
     def plot(self, solution=None):
@@ -81,7 +89,13 @@ class Maze:
         # build the walls of the grid
         txt = []
         for row in self.data:
-            txt.append("".join(["#" if cell else " " for cell in row]))
+            str_row = []
+            for cell in row:
+                if cell == CellType.WALL:
+                    str_row.append("#")
+                elif cell == CellType.ROAD:
+                    str_row.append(" ")
+            txt.append("".join(str_row))
 
         return "\n".join(txt)
 
