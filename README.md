@@ -37,7 +37,7 @@ Get solution and plot on screen:
 
 ```python
 m = mmaze.generate(width=3, height=3)
-solutions = m.solve((0, 0), (2, 2))
+solutions = m.solve(start=(0, 0), end=(2, 2))
 print(m.tostring(solution=solutions[0]))
 
 """
