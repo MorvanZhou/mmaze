@@ -85,3 +85,13 @@ class SolverTest(unittest.TestCase):
         self.assertGreater(len(solutions), 0)
         self.assertGreater(len(solutions[0]), 0)
         m.save("demo.png", solutions[0])
+
+    def test_solve_print(self):
+        g = mmaze.generator.Prims()
+        m = g.generate(3, 3)
+        print(m)
+        solutions = m.solve((0, 0), (2, 2))
+
+        self.assertGreater(len(solutions), 0)
+        self.assertGreater(len(solutions[0]), 0)
+        print(m.tostring(solution=solutions[0]))

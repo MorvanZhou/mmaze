@@ -14,13 +14,13 @@ m = mmaze.generate(width=3, height=3)
 print(m)
 
 """
-#######
-# #   #
-# ### #
-#     #
-# #####
-#     #
-#######
+■■■■■■■
+■ ■   ■
+■ ■ ■■■
+■     ■
+■■■ ■■■
+■     ■
+■■■■■■■
 """
 ```
 
@@ -36,13 +36,28 @@ m.plot()
 Get solution and plot on screen:
 
 ```python
+m = mmaze.generate(width=3, height=3)
+solutions = m.solve((0, 0), (2, 2))
+print(m.tostring(solution=solutions[0]))
+
+"""
+■■■■■■■
+■S■   ■
+■*■ ■■■
+■***  ■
+■■■*■■■
+■  **E■
+■■■■■■■
+"""
+```
+
+```python
 m = mmaze.generate(width=10, height=10)
 solutions = m.sovle(start=(0, 0), end=(9, 9))
 m.plot(solution=solutions[0])
 ```
 
 <img src="https://raw.githubusercontent.com/MorvanZhou/mmaze/master/demo.png" alt="drawing" width="180"/>
-
 
 ## Demo
 

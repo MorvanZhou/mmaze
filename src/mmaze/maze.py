@@ -82,7 +82,7 @@ class Maze:
     def base_width(self):
         return self._base_width
 
-    def tostring(self):
+    def tostring(self, solution=None):
         if self.data is None:
             return ""
 
@@ -92,12 +92,20 @@ class Maze:
             str_row = []
             for cell in row:
                 if cell == CellType.WALL:
-                    str_row.append("#")
+                    str_row.append("■")
                 elif cell == CellType.ROAD:
                     str_row.append(" ")
-            txt.append("".join(str_row))
+            txt.append(str_row)
 
-        return "\n".join(txt)
+        if solution is not None and len(solution) > 2:
+            txt[solution[0][0]][solution[0][1]] = "S"
+            txt[solution[-1][0]][solution[-1][1]] = "E"
+            sol = solution[1: -1]
+
+            for i, p in enumerate(sol):
+                txt[p[0]][p[1]] = "*"
+
+        return "\n".join("".join(row) for row in txt)
 
     def __str__(self):
         """display maze walls, entrances, and solutions, if available
