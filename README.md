@@ -1,9 +1,8 @@
 # MMaze
 
-A simple python maze generator and solver.
+A python maze generator and solver.
 
-
-## Simple usage
+## Usage
 
 Generating a maze with specific width and height. Print on screen directly.
 
@@ -51,6 +50,8 @@ print(m.tostring(solution=solutions[0]))
 """
 ```
 
+Generate a solution and plot to an image.
+
 ```python
 m = mmaze.generate(width=10, height=10)
 solutions = m.sovle(start=(0, 0), end=(9, 9))
@@ -59,20 +60,12 @@ m.plot(solution=solutions[0])
 
 <img src="https://raw.githubusercontent.com/MorvanZhou/mmaze/master/demo.png" alt="drawing" width="300"/>
 
-## Demo
-
-Demo can be found in test file: [tests](https://github.com/MorvanZhou/mmaze/blob/master/tests/mmaze_test.py)
-
 ## Install
 
 ```
 pip install mmaze
 ```
 
-## Download or fork
-Download [link](https://github.com/MorvanZhou/mmaze/archive/master.zip)
+## More demo use cases
 
-Fork this repo:
-```
-$ git clone https://github.com/MorvanZhou/mmaze.git
-```
+Demo can be found in test file: [tests](https://github.com/MorvanZhou/mmaze/blob/master/tests/mmaze_test.py)
