@@ -1,0 +1,4 @@
+matplotlib==3.5.0
+tox==3.24.3
+build
+twine

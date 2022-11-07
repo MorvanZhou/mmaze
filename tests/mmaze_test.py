@@ -1,7 +1,9 @@
 import unittest
 import random
+import os
 
 import mmaze
+import matplotlib.pyplot as plt
 
 
 class MazeToolTest(unittest.TestCase):
@@ -24,10 +26,15 @@ class MazeToolTest(unittest.TestCase):
     def test_save(self):
         self.m = mmaze.generate(width=self.w, height=self.h, method="prims")
         self.m.save("save.png")
+        os.remove("save.png")
 
     def test_plot(self):
         self.m = mmaze.generate(width=self.w, height=self.h, method="prims")
+        plt.ion()
         self.m.plot()
+        plt.clf()
+        plt.close()
+        plt.ioff()
 
     def test_binary_tree(self):
         g = mmaze.generator.BinaryTree()
@@ -56,7 +63,6 @@ class MazeToolTest(unittest.TestCase):
     def test_prims(self):
         g = mmaze.generator.Prims()
         self.m = g.generate(self.w, self.h)
-        self.m.plot()
 
     def test_division(self):
         g = mmaze.generator.Division()
@@ -78,7 +84,6 @@ class SolverTest(unittest.TestCase):
 
         self.assertGreater(len(solutions), 0)
         self.assertGreater(len(solutions[0]), 0)
-        m.plot(start, end, solutions[0])
 
     def test_solve_from_maze(self):
         g = mmaze.generator.Prims()
@@ -139,5 +144,4 @@ class SymmetryTest(unittest.TestCase):
     def test_symmetry_horizontal(self):
         w = 7
         m = mmaze.generate(width=w, height=w, symmetry="h", method="backtracking")
-        m.plot()
         self.assertEqual(w * 2 + 1, len(m.data[0]))
