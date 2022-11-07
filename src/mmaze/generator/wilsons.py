@@ -16,6 +16,7 @@ class Wilsons(BaseMazeGenerator):
     3. Add the cells and walls visited in the random walk to the UST.
     4. Repeat steps 2 and 3 until all cells have been added to the UST.
     """
+    symmetry_ok = False
 
     def __init__(self, hunt_order="random"):
         super().__init__()
@@ -26,7 +27,7 @@ class Wilsons(BaseMazeGenerator):
         else:
             self._hunt_order = RANDOM
 
-    def generate(self, width: int, height: int) -> Maze:
+    def _generate(self, width: int, height: int, **kwargs) -> Maze:
         m = Maze(width, height, CellType.WALL)
         # find an arbitrary starting position
         row, col = m.random_position()

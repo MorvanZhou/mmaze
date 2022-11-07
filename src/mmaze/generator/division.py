@@ -15,11 +15,9 @@ class Division(BaseMazeGenerator):
     3. Repeat step 2 with the areas on either side of the wall.
     4. Continue, recursively, until the maze passages are the desired resolution.
     """
+    symmetry_ok = False
 
-    def __init__(self):
-        super(Division, self).__init__()
-
-    def generate(self, width: int, height: int):
+    def _generate(self, width: int, height: int, **kwargs):
         # create empty grid
         m = Maze(width, height, cell_type=CellType.ROAD)
         # fill borders
@@ -66,16 +64,17 @@ class Division(BaseMazeGenerator):
                 for row in range(min_y, max_y + 1):
                     m.set(row, min_x + cut_posi, CellType.WALL)
                 m.set(min_y + door_posi, min_x + cut_posi, CellType.ROAD)
+
+                # add new regions to stack
+                region_stack.append(((min_y, min_x), (max_y, min_x + cut_posi - 1)))
+                region_stack.append(((min_y, min_x + cut_posi + 1), (max_y, max_x)))
+
             else:  # horizontal
                 for col in range(min_x, max_x + 1):
                     m.set(min_y + cut_posi, col, CellType.WALL)
                 m.set(min_y + cut_posi, min_x + door_posi, CellType.ROAD)
 
-            # add new regions to stack
-            if cut_direction == 0:  # vertical
-                region_stack.append(((min_y, min_x), (max_y, min_x + cut_posi - 1)))
-                region_stack.append(((min_y, min_x + cut_posi + 1), (max_y, max_x)))
-            else:  # horizontal
+                # add new regions to stack
                 region_stack.append(((min_y, min_x), (min_y + cut_posi - 1, max_x)))
                 region_stack.append(((min_y + cut_posi + 1, min_x), (max_y, max_x)))
 

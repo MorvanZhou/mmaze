@@ -1,6 +1,6 @@
 import random
 
-from mmaze.generator.base import BaseMazeGenerator
+from mmaze.generator.base import BaseMazeGenerator, set_cell
 from mmaze.maze import Maze
 from mmaze.cell import CellType
 
@@ -22,6 +22,7 @@ class HuntAndKill(BaseMazeGenerator):
     the probability of an unexplored cell is very, very low. The second option includes a small amount of risk, but it
     creates a more interesting, harder maze.
     """
+    symmetry_ok = True
 
     def __init__(self, hunt_order="random"):
         super().__init__()
@@ -32,23 +33,22 @@ class HuntAndKill(BaseMazeGenerator):
         else:
             self.ho = RANDOM
 
-    def generate(self, width: int, height: int) -> Maze:
+    def _generate(self, width: int, height: int, symmetry: str = "none") -> Maze:
         m = Maze(width, height, CellType.WALL)
         # find an arbitrary starting position
         row, col = m.random_position()
-        m.set(row, col, CellType.ROAD)
+        set_cell(m, (row, col), CellType.ROAD, symmetry)
 
         # perform many random walks, to fill the maze
         num_trials = 0
         while (row, col) != (-1, -1):
-            self._walk(m, row, col)
+            self._walk(m, row, col, symmetry)
             row, col = self._hunt(m, num_trials)
             num_trials += 1
 
         return m
 
-    @staticmethod
-    def _walk(maze: Maze, row, col):
+    def _walk(self, maze: Maze, row, col, symmetry):
         """This is a standard random walk. It must start from a visited cell.
         And it completes when the current cell has no unvisited neighbors.
 
@@ -64,8 +64,13 @@ class HuntAndKill(BaseMazeGenerator):
 
             while len(unvisited_neighbors) > 0:
                 neighbor = random.choice(unvisited_neighbors)
-                maze.set(neighbor[0], neighbor[1], CellType.ROAD)
-                maze.set((neighbor[0] + this_row) // 2, (neighbor[1] + this_col) // 2, CellType.ROAD)
+                set_cell(maze, (neighbor[0], neighbor[1]), CellType.ROAD, symmetry)
+                set_cell(
+                    maze,
+                    ((neighbor[0] + this_row) // 2, (neighbor[1] + this_col) // 2),
+                    CellType.ROAD,
+                    symmetry
+                )
                 this_row, this_col = neighbor
                 unvisited_neighbors = maze.find_neighbors(this_row, this_col, True)
 
@@ -117,7 +122,7 @@ class HuntAndKill(BaseMazeGenerator):
                     return -1, -1
 
             if (
-                    maze.set(row, col, CellType.ROAD)
+                    maze.get(row, col) == CellType.ROAD
                     and len(maze.find_neighbors(row, col, True)) > 0
             ):
                 found = True

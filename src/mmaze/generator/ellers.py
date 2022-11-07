@@ -16,13 +16,14 @@ class Ellers(BaseMazeGenerator):
     5. Repeast until the last row.
     6. In the last row, join all adjacent cells that do not share a set.
     """
+    symmetry_ok = False
 
     def __init__(self, xskew=0.5, yskew=0.5):
         super().__init__()
         self.xskew = 0.0 if xskew < 0.0 else 1.0 if xskew > 1.0 else xskew
         self.yskew = 0.0 if yskew < 0.0 else 1.0 if yskew > 1.0 else yskew
 
-    def generate(self, width: int, height: int) -> Maze:
+    def _generate(self, width: int, height: int, **kwargs) -> Maze:
         m = Maze(width, height, CellType.ROAD)
         # create empty grid, with walls
         sets = [[-1] * m.width for _ in range(m.height)]
@@ -37,7 +38,7 @@ class Ellers(BaseMazeGenerator):
             self._merge_down_a_row(sets, r, m.width, m.height)
 
         # process last row
-        max_set_number = self._init_row(sets, m.height - 2, max_set_number, m.width)
+        _ = self._init_row(sets, m.height - 2, max_set_number, m.width)
         self._process_last_row(sets, m.width, m.height)
 
         # translate grid cell sets into a maze

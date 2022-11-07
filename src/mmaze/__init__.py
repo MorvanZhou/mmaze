@@ -32,21 +32,21 @@ def _set_solver_map(cls, m: dict):
         _set_solver_map(subclass, m)
 
 
-def generate(width: int, height: int, method: str = "backtracking") -> Maze:
+def generate(width: int, height: int, symmetry: str = "none", method: str = "backtracking") -> Maze:
     if len(__GENERATOR_MAP) == 0:
         _set_generator_map(BaseMazeGenerator, __GENERATOR_MAP)
     try:
         g = __GENERATOR_MAP[method.lower()]()
     except KeyError as e:
         raise ValueError(f"method of '{method}' is not found, try one of {list(__GENERATOR_MAP.keys())}: {e}")
-    return g.generate(width=width, height=height)
+    return g.generate(width=width, height=height, symmetry=symmetry)
 
 
-def solve(maze: "Maze", start: tp.Sequence[int], end: tp.Sequence[int], method: str = "backtracking") -> tp.List:
+def solve(m: "Maze", start: tp.Sequence[int], end: tp.Sequence[int], method: str = "backtracking") -> tp.List:
     if len(__SOLVER_MAP) == 0:
         _set_solver_map(BaseSolver, __SOLVER_MAP)
     try:
         s = __SOLVER_MAP[method.lower()]()
     except KeyError as e:
         raise ValueError(f"method of '{method}' is not found, try one of {list(__SOLVER_MAP.keys())}: {e}")
-    return s.solve(maze=maze, start=start, end=end)
+    return s.solve(maze=m, start=start, end=end)

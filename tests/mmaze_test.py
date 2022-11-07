@@ -56,6 +56,7 @@ class MazeToolTest(unittest.TestCase):
     def test_prims(self):
         g = mmaze.generator.Prims()
         self.m = g.generate(self.w, self.h)
+        self.m.plot()
 
     def test_division(self):
         g = mmaze.generator.Division()
@@ -109,4 +110,34 @@ class SolverTest(unittest.TestCase):
         start = (0, 0)
         end = (2, 2)
         solutions = m.solve(start, end)
-        print(m.to_number(start, end, solutions[0]))
+        res = m.to_number(start, end, solutions[0])
+        print(res)
+        self.assertIsInstance(res[0][0], int)
+
+
+class SymmetryTest(unittest.TestCase):
+    def test_symmetry(self):
+        h = 21
+        random.seed(1)
+        with self.assertRaises(ValueError):
+            mmaze.generate(width=h, height=h, symmetry="xx")
+        for method in [
+            "backtracking", "growingtree", "huntandkill", "prims"
+        ]:
+            for s in ["v", "h", "b", "n"]:
+                for _ in range(3):
+                    m = mmaze.generate(width=h, height=h, symmetry=s, method=method)
+                    self.assertEqual(h * 2 + 1, len(m.data))
+                    self.assertEqual(h * 2 + 1, len(m.data[0]))
+                    solutions = m.solve(start=(0, 0), end=(h - 1, h - 1))
+                    self.assertGreater(len(solutions), 0, msg=f"{method=}, {s=}")
+
+        for method in ["binarytree", "division", "ellers", "kruskal", "wilsons"]:
+            with self.assertRaises(ValueError):
+                mmaze.generate(width=h, height=h, symmetry="v", method=method)
+
+    def test_symmetry_horizontal(self):
+        w = 7
+        m = mmaze.generate(width=w, height=w, symmetry="h", method="backtracking")
+        m.plot()
+        self.assertEqual(w * 2 + 1, len(m.data[0]))

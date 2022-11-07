@@ -1,6 +1,6 @@
 import random
 
-from mmaze.generator.base import BaseMazeGenerator
+from mmaze.generator.base import BaseMazeGenerator, set_cell
 from mmaze.maze import Maze
 from mmaze.cell import CellType
 
@@ -19,15 +19,17 @@ class GrowingTree(BaseMazeGenerator):
         Splits the logic to either use Recursive Backtracking (RB) or Prim's (random)
         to select the next cell to visit. (default 1.0)
     """
+    symmetry_ok = True
 
     def __init__(self, backtrack_chance=1.0):
+        super().__init__()
         self.backtrack_chance = backtrack_chance
 
-    def generate(self, width: int, height: int) -> Maze:
+    def _generate(self, width: int, height: int, symmetry: str = "none") -> Maze:
         m = Maze(width, height, CellType.WALL)
         row, col = m.random_position()
-        m.set(row, col, CellType.ROAD)
-        active = [(row, col)]
+        active = []
+        set_cell(m, (row, col), CellType.ROAD, symmetry, active)
 
         # continue until you have no more neighbors to move to
         while active:
@@ -43,9 +45,7 @@ class GrowingTree(BaseMazeGenerator):
                 continue
 
             row_, col_ = random.choice(next_neighbors)
-            active += [(row_, col_)]
-
-            m.set(row_, col_, CellType.ROAD)
-            m.set((row + row_) // 2, (col + col_) // 2, CellType.ROAD)
+            set_cell(m, (row_, col_), CellType.ROAD, symmetry, active)
+            set_cell(m, ((row + row_) // 2, (col + col_) // 2), CellType.ROAD, symmetry)
 
         return m

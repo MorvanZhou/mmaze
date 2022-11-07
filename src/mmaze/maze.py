@@ -15,6 +15,13 @@ class Maze:
         self.data: tp.List[tp.List[CellType]] = [[cell_type] * self._width for _ in range(self._height)]
         self.solutions = []
 
+    def check_wall(self, row, col, is_wall):
+        cell = self.get(row, col)
+        if is_wall:
+            return cell == CellType.WALL
+        else:
+            return cell != CellType.WALL
+
     def find_neighbors(self, r: int, c: int, is_wall: bool = False) -> tp.List[tp.Tuple[int, int]]:
         """Find all the grid neighbors of the current position; visited, or not.
 
@@ -26,22 +33,15 @@ class Maze:
             list: all neighboring cells that match our request
         """
 
-        def check_wall(row, col):
-            cell = self.get(row, col)
-            if is_wall:
-                return cell == CellType.WALL
-            else:
-                return cell != CellType.WALL
-
         ns = []
 
-        if r > 1 and check_wall(r - 2, c):
+        if r > 1 and self.check_wall(r - 2, c, is_wall):
             ns.append((r - 2, c))
-        if r < self.height - 2 and check_wall(r + 2, c):
+        if r < self.height - 2 and self.check_wall(r + 2, c, is_wall):
             ns.append((r + 2, c))
-        if c > 1 and check_wall(r, c - 2):
+        if c > 1 and self.check_wall(r, c - 2, is_wall):
             ns.append((r, c - 2))
-        if c < self.width - 2 and check_wall(r, c + 2):
+        if c < self.width - 2 and self.check_wall(r, c + 2, is_wall):
             ns.append((r, c + 2))
 
         random.shuffle(ns)

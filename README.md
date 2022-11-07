@@ -54,11 +54,26 @@ Generate a solution and plot to an image.
 
 ```python
 m = mmaze.generate(width=10, height=10)
-solutions = m.sovle(start=(0, 0), end=(9, 9))
+solutions = m.solve(start=(0, 0), end=(9, 9))
 m.plot(solution=solutions[0])
 ```
 
 <img src="https://raw.githubusercontent.com/MorvanZhou/mmaze/master/demo.png" alt="drawing" width="300"/>
+
+To make a symmetric maze by passing a symmetry method. Note that width or height must be odd number when you want to
+solve the generated maze.
+
+In this repo, only backtracking / growingtree / huntandkill / prims algorithms can generate symmetric maze.
+
+```python
+start = (0, 0)
+end = (10, 10)
+m = mmaze.generate(width=11, height=11, symmetry="horizontal")
+solutions = m.solve(start=start, end=end)
+m.plot(solution=solutions[0], start=start, end=end)
+```
+
+<img src="https://raw.githubusercontent.com/MorvanZhou/mmaze/master/demo_symmetry.png" alt="drawing" width="300"/>
 
 ## Install
 

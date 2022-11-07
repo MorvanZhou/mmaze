@@ -7,6 +7,7 @@ from mmaze.cell import CellType
 
 class BinaryTree(BaseMazeGenerator):
     """For every cell in the grid, knock down a wall either North or West."""
+    symmetry_ok = False
 
     def __init__(self, skew=None):
         super().__init__()
@@ -22,7 +23,7 @@ class BinaryTree(BaseMazeGenerator):
             key = random.choice(list(skewes.keys()))
             self.skew = skewes[key]
 
-    def generate(self, width: int, height: int) -> Maze:
+    def _generate(self, width: int, height: int, **kwargs) -> Maze:
         m = Maze(width, height, CellType.WALL)
 
         for row in range(1, m.height, 2):
@@ -46,9 +47,8 @@ class BinaryTree(BaseMazeGenerator):
         for b_row, b_col in self.skew:
             neighbor_row = row + b_row
             neighbor_col = col + b_col
-            if 0 < neighbor_row < (maze_height - 1):
-                if 0 < neighbor_col < (maze_width - 1):
-                    neighbors.append((neighbor_row, neighbor_col))
+            if 0 < neighbor_row < (maze_height - 1) and 0 < neighbor_col < (maze_width - 1):
+                neighbors.append((neighbor_row, neighbor_col))
 
         if len(neighbors) == 0:
             return row, col
