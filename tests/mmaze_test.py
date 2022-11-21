@@ -135,7 +135,7 @@ class SymmetryTest(unittest.TestCase):
                     self.assertEqual(h * 2 + 1, len(m.data))
                     self.assertEqual(h * 2 + 1, len(m.data[0]))
                     solutions = m.solve(start=(0, 0), end=(h - 1, h - 1))
-                    self.assertGreater(len(solutions), 0, msg=f"{method=}, {s=}")
+                    self.assertGreater(len(solutions), 0, msg=f"method={method}, s={s}")
 
         for method in ["binarytree", "division", "ellers", "kruskal", "wilsons"]:
             with self.assertRaises(ValueError):
