@@ -94,7 +94,7 @@ class SolverTest(unittest.TestCase):
 
         self.assertGreater(len(solutions), 0)
         self.assertGreater(len(solutions[0]), 0)
-        m.save("demo.png", start=start, end=end, solution=solutions[0])
+        m.save("tmp/demo.png", start=start, end=end, solution=solutions[0])
 
     def test_solve_print(self):
         g = mmaze.generator.Prims()

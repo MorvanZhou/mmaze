@@ -4,3 +4,4 @@
 /src/mmaze.egg-info
 /tests/*.png
 /.tox
+/tmp
