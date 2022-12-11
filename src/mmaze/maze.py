@@ -119,7 +119,7 @@ class Maze:
             p = [p * 2 + 1 for p in end]
             res[p[0]][p[1]] = CellType.END.value
         if solution is not None:
-            for i, p in enumerate(solution):
+            for _, p in enumerate(solution):
                 res[p[0]][p[1]] = CellType.SOLUTION.value
         return res
 
@@ -138,21 +138,21 @@ class Maze:
             str_row = []
             for cell in row:
                 if cell == CellType.WALL:
-                    str_row.append("■")
+                    str_row.append("||")
                 elif cell == CellType.ROAD:
-                    str_row.append(" ")
+                    str_row.append("  ")
             txt.append(str_row)
 
         if solution is not None:
-            for i, p in enumerate(solution):
-                txt[p[0]][p[1]] = "*"
+            for _, p in enumerate(solution):
+                txt[p[0]][p[1]] = "**"
 
         if start is not None:
             p = [p * 2 + 1 for p in start]
-            txt[p[0]][p[1]] = "S"
+            txt[p[0]][p[1]] = "S "
         if end is not None:
             p = [p * 2 + 1 for p in end]
-            txt[p[0]][p[1]] = "E"
+            txt[p[0]][p[1]] = "E "
         return "\n".join("".join(row) for row in txt)
 
     def __str__(self):

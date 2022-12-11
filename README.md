@@ -13,19 +13,21 @@ m = mmaze.generate(width=3, height=3)
 print(m)
 
 """
-■■■■■■■
-■ ■   ■
-■ ■ ■■■
-■     ■
-■■■ ■■■
-■     ■
-■■■■■■■
+||||||||||||||
+||      ||  ||
+||||||  ||  ||
+||  ||      ||
+||  ||||||  ||
+||          ||
+||||||||||||||
 """
 ```
 
 Plot the maze to image.
 
 ```python
+import mmaze
+
 m = mmaze.generate(width=3, height=3)
 m.plot()
 ```
@@ -35,27 +37,31 @@ m.plot()
 Get solution and plot on screen:
 
 ```python
+import mmaze
+
 m = mmaze.generate(width=3, height=3)
 solutions = m.solve(start=(0, 0), end=(2, 2))
-print(m.tostring(solution=solutions[0]))
+print(m.tostring(solution=solutions[0], start=(0, 0), end=(2, 2)))
 
 """
-■■■■■■■
-■S■   ■
-■*■ ■■■
-■***  ■
-■■■*■■■
-■  **E■
-■■■■■■■
+||||||||||||||
+||S ********||
+||  ||||||**||
+||  ||    **||
+||  ||||||**||
+||  ||    E ||
+||||||||||||||
 """
 ```
 
 Generate a solution and plot to an image.
 
 ```python
+import mmaze
+
 m = mmaze.generate(width=10, height=10)
 solutions = m.solve(start=(0, 0), end=(9, 9))
-m.plot(solution=solutions[0])
+m.plot(solution=solutions[0], start=(0, 0), end=(9, 9))
 ```
 
 <img src="https://raw.githubusercontent.com/MorvanZhou/mmaze/master/demo.png" alt="drawing" width="300"/>
@@ -66,6 +72,8 @@ solve the generated maze.
 In this repo, only backtracking / growingtree / huntandkill / prims algorithms can generate symmetric maze.
 
 ```python
+import mmaze
+
 start = (0, 0)
 end = (10, 10)
 m = mmaze.generate(width=11, height=11, symmetry="horizontal")
