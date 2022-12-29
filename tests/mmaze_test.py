@@ -78,9 +78,6 @@ class RandomTest(unittest.TestCase):
         seed = 4
         g1 = mmaze.generate(15, 15, seed=seed, method="prims")
         g2 = mmaze.generate(15, 15, seed=seed, method="prims")
-        print(len(g1.to_number()))
-        print(g1.to_number())
-        print(g1)
         self.assertEqual(g1.to_number(), g2.to_number())
 
 
