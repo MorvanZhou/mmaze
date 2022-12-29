@@ -1,4 +1,6 @@
 import logging
+import typing as tp
+import random
 from abc import ABCMeta, abstractmethod
 
 from mmaze.maze import Maze
@@ -8,11 +10,14 @@ from mmaze.cell import CellType
 class BaseMazeGenerator(metaclass=ABCMeta):
     symmetry_ok: bool
 
-    def generate(self, width: int, height: int, symmetry: str = "none"):
+    def generate(self, width: int, height: int, symmetry: str = "none", seed: tp.Optional[int] = None):
         if symmetry not in ("n", "none") and not self.symmetry_ok:
             raise ValueError("symmetry must be 'none' for this generator, "
                              "or you can use backtracking/growingtree/huntandkill/prims"
                              " to generate symmetric maze")
+        if seed is not None:
+            random.seed(seed)
+
         if self.symmetry_ok:
             if symmetry[0].lower() == "v" and height % 2 == 0:
                 logging.warning("if with vertical symmetry, height must be odd number to ensure maze connection.")

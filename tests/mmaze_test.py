@@ -73,6 +73,17 @@ class MazeToolTest(unittest.TestCase):
         self.m = g.generate(self.w, self.h)
 
 
+class RandomTest(unittest.TestCase):
+    def test_seed(self):
+        seed = 4
+        g1 = mmaze.generate(15, 15, seed=seed, method="prims")
+        g2 = mmaze.generate(15, 15, seed=seed, method="prims")
+        print(len(g1.to_number()))
+        print(g1.to_number())
+        print(g1)
+        self.assertEqual(g1.to_number(), g2.to_number())
+
+
 class SolverTest(unittest.TestCase):
     def test_backtracking_solver(self):
         g = mmaze.generator.Prims()
