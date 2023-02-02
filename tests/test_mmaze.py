@@ -1,9 +1,10 @@
-import unittest
-import random
 import os
+import random
+import unittest
+
+import matplotlib.pyplot as plt
 
 import mmaze
-import matplotlib.pyplot as plt
 
 
 class MazeToolTest(unittest.TestCase):
@@ -129,6 +130,11 @@ class SolverTest(unittest.TestCase):
 
 
 class SymmetryTest(unittest.TestCase):
+    @classmethod
+    def tearDownClass(cls) -> None:
+        os.remove("tmp/demo.png")
+        os.rmdir("tmp")
+
     def test_symmetry(self):
         h = 21
         random.seed(1)
